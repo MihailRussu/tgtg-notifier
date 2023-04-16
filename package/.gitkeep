@@ -1,0 +1,2 @@
+# Scaleway Serverless Functions expect any Python dependencies to be provided in this directory,
+# which is automatically done during CI/CD step.

@@ -1,0 +1,33 @@
+service: checkers
+configValidationMode: off
+frameworkVersion: ^3.30.1
+provider:
+  name: scaleway
+  runtime: python311
+
+plugins:
+  - serverless-scaleway-functions
+
+package:
+  patterns:
+    - 'src/**'
+    - 'package/**'
+
+functions:
+  tgtg:
+    handler: src/handler.handle
+    secret:
+      TGTG_ACCESS_TOKEN: ${env:TGTG_ACCESS_TOKEN}
+      TGTG_REFRESH_TOKEN: ${env:TGTG_REFRESH_TOKEN}
+      TGTG_USER_ID: ${env:TGTG_USER_ID}
+      TGTG_COOKIE: ${env:TGTG_COOKIE}
+    env:
+      TGTG_ITEM_IDS: ${env:TGTG_ITEM_IDS}
+      SENTRY_DSN: ${env:SENTRY_DSN}
+    memoryLimit: 128
+    minScale: 0
+    maxScale: 1
+    privacy: private
+    events:
+      - schedule:
+          rate: '* * * * *' # trigger the function every minute

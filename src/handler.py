@@ -4,6 +4,7 @@ import os
 from tgtg import TgtgClient
 
 from sentry import init_sentry, serverless_function
+from telegram import send_notification
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +44,23 @@ def handle(event: dict, context: dict) -> str:
             if item and item.get('items_available', 0) > 0:
                 name = item['display_name']
                 items = item['items_available']
-                # image = item['item']['cover_picture']['current_url']
+                image_url = item['item']['cover_picture']['current_url']
+                value = item['item']['value_including_taxes']['minor_units']
+                value_currency = item['item']['value_including_taxes']['code']
+                formatted_value = f'{value / 100:,.2f} {value_currency}'
+
+                price = item['item']['price_including_taxes']['minor_units']
+                price_currency = item['item']['price_including_taxes']['code']
+                formatted_price = f'{price / 100:,.2f} {price_currency}'
+
                 address = item['pickup_location']['address']['address_line']
-                print(f'#{items} of "{name}" available at "{address}"')
+
+                message = (
+                    f'#{items} of "{name}" available at "{address}" '
+                    f'for {formatted_price} (value: {formatted_value})'
+                )
+
+                send_notification(message, image_url)
         except Exception as e:
             logger.error(e)
             return 'NOT OK'

@@ -46,6 +46,10 @@ jobs:
           TGTG_USER_ID: ${{ secrets.TGTG_USER_ID }}
           TGTG_COOKIE: ${{ secrets.TGTG_COOKIE }}
 
+          # TELEGRAM secrets
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
           # non-secret env vars
           TGTG_ITEM_IDS: ${{ vars.TGTG_ITEM_IDS }}
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
